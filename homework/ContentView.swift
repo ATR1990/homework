@@ -18,30 +18,26 @@ struct ContentView: View {
     
     var body: some View {
         TabView {
-            NavigationView {
-                List(products) { product in
-                    ProductCardView(product: product)
-                        .onTapGesture {
-                            selectedProduct = product
-                        }
-                        .sheet(item: $selectedProduct) { product in
-                            ProductDetailView(product: product, cart: $cart)
-                        }
-                }
-                .navigationBarTitle("Products")
+            List(products) { product in
+                ProductCardView(product: product)
+                    .onTapGesture {
+                        selectedProduct = product
+                    }
+                    .sheet(item: $selectedProduct) { product in
+                        ProductDetailView(product: product, cart: $cart)
+                    }
             }
+            .navigationBarTitle("Products")
             .tabItem {
                 Image(systemName: "house")
                 Text("Home")
             }
             
-            NavigationView {
-                CartView(cart: $cart)
-            }
-            .tabItem {
-                Image(systemName: "cart")
-                Text("Cart")
-            }
+            CartView(cart: $cart)
+                .tabItem {
+                    Image(systemName: "cart")
+                    Text("Cart")
+                }
         }
     }
 }
