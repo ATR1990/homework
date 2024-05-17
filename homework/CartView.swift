@@ -7,37 +7,61 @@
 
 import SwiftUI
 
-struct ProductCardView: View {
-    var product: Product
+struct CartView: View {
+    @Binding var cart: [Product]
+    @State private var isCheckingOut = false
+    @State private var showValidationLoader = false
+    
+    var totalCost: Double {
+        cart.reduce(0) { $0 + $1.price * Double($1.quantity) }
+    }
     
     var body: some View {
         VStack {
-            Text(product.name)
-                .font(.headline)
-            Text("$\(product.price, specifier: "%.2f")")
-                .font(.subheadline)
+            if totalCost < 8000 {
+                Text("Add \(8000 - totalCost, specifier: "%.2f") KZT for free shipping")
+                    .foregroundColor(.red)
+                    .padding()
+                    .background(Color.yellow)
+                    .cornerRadius(10)
+                    .padding(.horizontal)
+            }
+            
+            List {
+                ForEach(cart) { product in
+                    HorizontalProductCardView(product: product)
+                }
+            }
+            
+            HStack {
+                Text("Total: \(totalCost, specifier: "%.2f") KZT")
+                    .font(.title)
+                Spacer()
+                Button(action: {
+                    showValidationLoader = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        showValidationLoader = false
+                        isCheckingOut = true
+                    }
+                }) {
+                    Text("Checkout")
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+            }
+            .padding()
+            
+            if showValidationLoader {
+                ProgressView("Validating cart...")
+                    .padding()
+            }
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(10)
-        .shadow(radius: 5)
-    }
-}
-
-struct HorizontalProductCardView: View {
-    var product: Product
-    
-    var body: some View {
-        HStack {
-            Text(product.name)
-                .font(.headline)
-            Spacer()
-            Text("$\(product.price, specifier: "%.2f")")
-                .font(.subheadline)
+        .sheet(isPresented: $isCheckingOut) {
+            Text("Hello World!")
+                .font(.largeTitle)
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(10)
-        .shadow(radius: 5)
+        .navigationBarTitle("Cart")
     }
 }

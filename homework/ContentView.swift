@@ -9,9 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var products = [
-        Product(name: "Product 1", price: 10.0, description: "Description of Product 1"),
-        Product(name: "Product 2", price: 20.0, description: "Description of Product 2"),
-        Product(name: "Product 3", price: 30.0, description: "Description of Product 3")
+        Product(name: "Product 1", price: 1000.0, description: "Description of Product 1"),
+        Product(name: "Product 2", price: 2000.0, description: "Description of Product 2"),
+        Product(name: "Product 3", price: 3000.0, description: "Description of Product 3")
     ]
     @State private var cart: [Product] = []
     @State private var selectedProduct: Product?
@@ -25,7 +25,7 @@ struct ContentView: View {
                             selectedProduct = product
                         }
                         .sheet(item: $selectedProduct) { product in
-                            ProductDetailView(product: product)
+                            ProductDetailView(product: product, cart: $cart)
                         }
                 }
                 .navigationBarTitle("Products")
@@ -36,10 +36,7 @@ struct ContentView: View {
             }
             
             NavigationView {
-                List(cart) { product in
-                    HorizontalProductCardView(product: product)
-                }
-                .navigationBarTitle("Cart")
+                CartView(cart: $cart)
             }
             .tabItem {
                 Image(systemName: "cart")

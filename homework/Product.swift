@@ -12,4 +12,5 @@ struct Product: Identifiable {
     let name: String
     let price: Double
     let description: String
+    var quantity: Int = 1
 }
