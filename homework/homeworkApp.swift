@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct homeworkApp: App {
+    // @UIApplicationDelegateAdaptor связывает ваш класс AppDelegate с UIKit
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Text("Hello, World!") // Этот вид не будет использоваться, но требуется для SwiftUI приложения.
         }
     }
 }
+
